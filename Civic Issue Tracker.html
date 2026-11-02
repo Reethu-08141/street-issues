@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<!-- saved from url=(0102)file:///C:/Users/User/AppData/Local/Temp/8cf144ab-afe1-48cf-a2ab-5f99602a030f_files.zip.30f/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Civic Issue Tracker</title>
+<link rel="stylesheet" href="./Civic Issue Tracker_files/leaflet.min.css">
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--text:#1c2330;--muted:#667085;--line:#e3e6ec;--accent:#2457d6}
+@media (prefers-color-scheme:dark){:root{--bg:#12151b;--card:#1b2029;--text:#e8ebf1;--muted:#9aa4b5;--line:#2a313d;--accent:#7aa2ff}}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text)}
+header{padding:20px 16px 8px;max-width:1200px;margin:auto}h1{margin:0;font-size:22px}header p{margin:4px 0 0;color:var(--muted)}
+main{max-width:1200px;margin:auto;padding:8px 16px 40px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer}
+.stat b{display:block;font-size:24px}.stat span{color:var(--muted);font-size:13px}.stat.on{outline:2px solid var(--accent)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+input,select,textarea,button{font:inherit;color:var(--text);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+button{cursor:pointer}button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.grid{display:grid;grid-template-columns:1.3fr 1fr;gap:12px}@media(max-width:800px){.grid{grid-template-columns:1fr}}
+#map{height:480px;border-radius:12px;border:1px solid var(--line)}
+.list{max-height:480px;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px;cursor:pointer}
+.item small{color:var(--muted)}.tag{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;color:#fff;margin-right:6px}
+.st{font-size:12px;border:1px solid var(--line);border-radius:99px;padding:1px 8px}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:12px 0}summary{cursor:pointer;font-weight:600}
+form{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:10px}form .full{grid-column:1/-1}
+.hint{color:var(--muted);font-size:13px}footer{color:var(--muted);font-size:13px;text-align:center;padding:20px}
+</style>
+</head>
+<body>
+<header>
+  <h1>🏙️ Civic Issue Tracker</h1>
+  <p>Potholes, garbage, damaged footpaths and broken street lights — on one map.</p>
+</header>
+<main>
+  <div class="stats" id="stats"><div class="stat " data-k="pothole"><b>🕳️ 2</b><span>Pothole · 2 total</span></div><div class="stat " data-k="garbage"><b>🗑️ 1</b><span>Garbage · 2 total</span></div><div class="stat " data-k="footpath"><b>🚶 2</b><span>Damaged footpath · 2 total</span></div><div class="stat " data-k="streetlight"><b>💡 2</b><span>Broken street light · 2 total</span></div></div>
+
+  <div class="bar">
+    <input id="q" type="search" placeholder="Search description or location…" style="flex:1;min-width:200px">
+    <select id="fCat"><option value="">All categories</option><option value="pothole">🕳️ Pothole</option><option value="garbage">🗑️ Garbage</option><option value="footpath">🚶 Damaged footpath</option><option value="streetlight">💡 Broken street light</option></select>
+    <select id="fStatus"><option value="">All statuses</option><option>Open</option><option>In progress</option><option>Resolved</option></select>
+    <button id="btnExport">⬇ Export CSV</button>
+    <label class="hint" style="align-self:center"><button id="btnImport" type="button">⬆ Import CSV/JSON</button></label>
+    <input id="file" type="file" accept=".csv,.json" hidden="">
+  </div>
+
+  <div class="grid">
+    <div id="map" class="leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" tabindex="0" style="position: relative;"><div class="leaflet-pane leaflet-map-pane" style="transform: translate3d(0px, 0px, 0px);"><div class="leaflet-pane leaflet-tile-pane"><div class="leaflet-layer " style="z-index: 1; opacity: 1;"><div class="leaflet-tile-container leaflet-zoom-animated" style="z-index: 19; transform: translate3d(0px, 0px, 0px) scale(1);"><img alt="" src="./Civic Issue Tracker_files/30380.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(231px, 188px, 0px); opacity: 1;"><img alt="" src="./Civic Issue Tracker_files/30379.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(231px, -68px, 0px); opacity: 1;"><img alt="" src="./Civic Issue Tracker_files/30380(1).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-25px, 188px, 0px); opacity: 1;"><img alt="" src="./Civic Issue Tracker_files/30380(2).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(487px, 188px, 0px); opacity: 1;"><img alt="" src="./Civic Issue Tracker_files/30381.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(231px, 444px, 0px); opacity: 1;"><img alt="" src="./Civic Issue Tracker_files/30379(1).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-25px, -68px, 0px); opacity: 1;"><img alt="" src="./Civic Issue Tracker_files/30379(2).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(487px, -68px, 0px); opacity: 1;"><img alt="" src="./Civic Issue Tracker_files/30381(1).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-25px, 444px, 0px); opacity: 1;"><img alt="" src="./Civic Issue Tracker_files/30381(2).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(487px, 444px, 0px); opacity: 1;"></div></div></div><div class="leaflet-pane leaflet-overlay-pane"></div><div class="leaflet-pane leaflet-shadow-pane"><img src="./Civic Issue Tracker_files/marker-shadow.png" class="leaflet-marker-shadow leaflet-zoom-animated" alt="" style="margin-left: -12px; margin-top: -41px; width: 41px; height: 41px; opacity: 0.6; transform: translate3d(4394px, 1310px, 0px);"></div><div class="leaflet-pane leaflet-marker-pane"><img src="./Civic Issue Tracker_files/marker-icon-2x.png" class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive" alt="Marker" tabindex="0" role="button" style="margin-left: -12px; margin-top: -41px; width: 25px; height: 41px; opacity: 0.6; transform: translate3d(4394px, 1310px, 0px); z-index: 1310;"><div class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -15px; margin-top: -30px; width: 30px; height: 30px; transform: translate3d(1985px, 1573px, 0px); z-index: 1573;"><div style="background:#d9480f;color:#fff;width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 1px 4px #0006"><span style="transform:rotate(45deg)">🕳️</span></div></div><div class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -15px; margin-top: -30px; width: 30px; height: 30px; transform: translate3d(2819px, 3505px, 0px); z-index: 3505;"><div style="background:#d9480f;color:#fff;width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 1px 4px #0006"><span style="transform:rotate(45deg)">🕳️</span></div></div><div class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -15px; margin-top: -30px; width: 30px; height: 30px; transform: translate3d(3597px, 1750px, 0px); z-index: 1750;"><div style="background:#2f9e44;color:#fff;width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 1px 4px #0006"><span style="transform:rotate(45deg)">🗑️</span></div></div><div class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -15px; margin-top: -30px; width: 30px; height: 30px; transform: translate3d(1388px, 3993px, 0px); z-index: 3993;"><div style="background:#2f9e44;color:#fff;width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 1px 4px #0006"><span style="transform:rotate(45deg)">🗑️</span></div></div><div class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -15px; margin-top: -30px; width: 30px; height: 30px; transform: translate3d(326px, 239px, 0px); z-index: 239;"><div style="background:#7048e8;color:#fff;width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 1px 4px #0006"><span style="transform:rotate(45deg)">🚶</span></div></div><div class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -15px; margin-top: -30px; width: 30px; height: 30px; transform: translate3d(2465px, 3505px, 0px); z-index: 3505;"><div style="background:#7048e8;color:#fff;width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 1px 4px #0006"><span style="transform:rotate(45deg)">🚶</span></div></div><div class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -15px; margin-top: -30px; width: 30px; height: 30px; transform: translate3d(3490px, 4633px, 0px); z-index: 4633;"><div style="background:#e6a700;color:#fff;width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 1px 4px #0006"><span style="transform:rotate(45deg)">💡</span></div></div><div class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -15px; margin-top: -30px; width: 30px; height: 30px; transform: translate3d(1346px, 1539px, 0px); z-index: 1539;"><div style="background:#e6a700;color:#fff;width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 1px 4px #0006"><span style="transform:rotate(45deg)">💡</span></div></div></div><div class="leaflet-pane leaflet-tooltip-pane"></div><div class="leaflet-pane leaflet-popup-pane"><div class="leaflet-popup  leaflet-zoom-animated" style="opacity: 1; transform: translate3d(326px, 211px, 0px); bottom: -7px; left: -129px;"><div class="leaflet-popup-content-wrapper"><div class="leaflet-popup-content" style="width: 212px;"><b>Damaged footpath</b><br>Broken slabs, unsafe for pedestrians<br><small>Malleshwaram 8th Cross · Open</small></div></div><div class="leaflet-popup-tip-container"><div class="leaflet-popup-tip"></div></div><a class="leaflet-popup-close-button" role="button" aria-label="Close popup" href="file:///C:/Users/User/AppData/Local/Temp/8cf144ab-afe1-48cf-a2ab-5f99602a030f_files.zip.30f/index.html#close"><span aria-hidden="true">×</span></a></div></div><div class="leaflet-proxy leaflet-zoom-animated" style="transform: translate3d(1.20037e+07px, 7.77733e+06px, 0px) scale(32768);"></div></div><div class="leaflet-control-container"><div class="leaflet-top leaflet-left"><div class="leaflet-control-zoom leaflet-bar leaflet-control"><a class="leaflet-control-zoom-in" href="file:///C:/Users/User/AppData/Local/Temp/8cf144ab-afe1-48cf-a2ab-5f99602a030f_files.zip.30f/index.html#" title="Zoom in" role="button" aria-label="Zoom in" aria-disabled="false"><span aria-hidden="true">+</span></a><a class="leaflet-control-zoom-out" href="file:///C:/Users/User/AppData/Local/Temp/8cf144ab-afe1-48cf-a2ab-5f99602a030f_files.zip.30f/index.html#" title="Zoom out" role="button" aria-label="Zoom out" aria-disabled="false"><span aria-hidden="true">−</span></a></div></div><div class="leaflet-top leaflet-right"></div><div class="leaflet-bottom leaflet-left"></div><div class="leaflet-bottom leaflet-right"><div class="leaflet-control-attribution leaflet-control"><a href="https://leafletjs.com/" title="A JavaScript library for interactive maps"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" class="leaflet-attribution-flag"><path fill="#4C7BE1" d="M0 0h12v4H0z"></path><path fill="#FFD500" d="M0 4h12v3H0z"></path><path fill="#E0BC00" d="M0 7h12v1H0z"></path></svg> Leaflet</a> <span aria-hidden="true">|</span> © OpenStreetMap contributors</div></div></div></div>
+    <div class="list" id="list"><div class="item" data-id="7"><span class="tag" style="background:#e6a700">💡 Broken street light</span><span class="st">Open</span>
+    <div>Three lights out on the stretch</div><small>HSR Layout Sector 2 · 2026-10-30</small>
+    <div style="margin-top:6px"><select class="chg" data-id="7"><option selected="">Open</option><option>In progress</option><option>Resolved</option></select>
+    <button class="del" data-id="7">Delete</button></div></div><div class="item" data-id="3"><span class="tag" style="background:#2f9e44">🗑️ Garbage</span><span class="st">Open</span>
+    <div>Overflowing bin, not cleared for days</div><small>Indiranagar 12th Main · 2026-10-28</small>
+    <div style="margin-top:6px"><select class="chg" data-id="3"><option selected="">Open</option><option>In progress</option><option>Resolved</option></select>
+    <button class="del" data-id="3">Delete</button></div></div><div class="item" data-id="6"><span class="tag" style="background:#7048e8">🚶 Damaged footpath</span><span class="st">In progress</span>
+    <div>Footpath blocked by debris</div><small>Koramangala 5th Block · 2026-10-25</small>
+    <div style="margin-top:6px"><select class="chg" data-id="6"><option>Open</option><option selected="">In progress</option><option>Resolved</option></select>
+    <button class="del" data-id="6">Delete</button></div></div><div class="item" data-id="1"><span class="tag" style="background:#d9480f">🕳️ Pothole</span><span class="st">Open</span>
+    <div>Deep pothole near bus stop</div><small>MG Road · 2026-10-20</small>
+    <div style="margin-top:6px"><select class="chg" data-id="1"><option selected="">Open</option><option>In progress</option><option>Resolved</option></select>
+    <button class="del" data-id="1">Delete</button></div></div><div class="item" data-id="5"><span class="tag" style="background:#7048e8">🚶 Damaged footpath</span><span class="st">Open</span>
+    <div>Broken slabs, unsafe for pedestrians</div><small>Malleshwaram 8th Cross · 2026-10-18</small>
+    <div style="margin-top:6px"><select class="chg" data-id="5"><option selected="">Open</option><option>In progress</option><option>Resolved</option></select>
+    <button class="del" data-id="5">Delete</button></div></div><div class="item" data-id="2"><span class="tag" style="background:#d9480f">🕳️ Pothole</span><span class="st">Open</span>
+    <div>Multiple potholes after rain</div><small>Outer Ring Road · 2026-10-12</small>
+    <div style="margin-top:6px"><select class="chg" data-id="2"><option selected="">Open</option><option>In progress</option><option>Resolved</option></select>
+    <button class="del" data-id="2">Delete</button></div></div><div class="item" data-id="8"><span class="tag" style="background:#e6a700">💡 Broken street light</span><span class="st">In progress</span>
+    <div>Flickering light near park</div><small>Cubbon Park Gate · 2026-10-05</small>
+    <div style="margin-top:6px"><select class="chg" data-id="8"><option>Open</option><option selected="">In progress</option><option>Resolved</option></select>
+    <button class="del" data-id="8">Delete</button></div></div><div class="item" data-id="4"><span class="tag" style="background:#2f9e44">🗑️ Garbage</span><span class="st">Resolved</span>
+    <div>Illegal dumping on vacant plot</div><small>Jayanagar 4th Block · 2026-09-30</small>
+    <div style="margin-top:6px"><select class="chg" data-id="4"><option>Open</option><option>In progress</option><option selected="">Resolved</option></select>
+    <button class="del" data-id="4">Delete</button></div></div></div>
+  </div>
+
+  <details>
+    <summary>➕ Report a new issue</summary>
+    <p class="hint">Click the map to pick the location (or type coordinates), then submit.</p>
+    <form id="form">
+      <select name="category" id="fCatForm" required=""><option value="pothole">🕳️ Pothole</option><option value="garbage">🗑️ Garbage</option><option value="footpath">🚶 Damaged footpath</option><option value="streetlight">💡 Broken street light</option></select>
+      <input name="location" placeholder="Street / landmark" required="">
+      <input name="lat" id="lat" type="number" step="any" placeholder="Latitude" required="">
+      <input name="lng" id="lng" type="number" step="any" placeholder="Longitude" required="">
+      <select name="status"><option>Open</option><option>In progress</option><option>Resolved</option></select>
+      <input name="date" type="date">
+      <textarea class="full" name="description" rows="2" placeholder="Describe the problem" required=""></textarea>
+      <button class="primary full" type="submit">Add issue</button>
+    </form>
+  </details>
+
+  <details open="">
+    <summary>📄 Import format</summary>
+    <p class="hint">CSV header: <code>category,description,location,lat,lng,status,date</code><br>
+    Categories: <code>pothole</code>, <code>garbage</code>, <code>footpath</code>, <code>streetlight</code>. Status: Open / In progress / Resolved. JSON: an array of objects with the same keys.</p>
+    <button id="btnReset">Reset to sample data</button>
+  </details>
+</main>
+<footer>Open source (MIT) · Map © OpenStreetMap contributors · Data is stored only in your browser</footer>
+
+<script src="./Civic Issue Tracker_files/leaflet.min.js.download"></script>
+<script>
+const CATS={
+  pothole:{label:'Pothole',icon:'🕳️',color:'#d9480f'},
+  garbage:{label:'Garbage',icon:'🗑️',color:'#2f9e44'},
+  footpath:{label:'Damaged footpath',icon:'🚶',color:'#7048e8'},
+  streetlight:{label:'Broken street light',icon:'💡',color:'#e6a700'}
+};
+const KEY='civic-issues-v1';
+const SAMPLE=[
+ {category:'pothole',description:'Deep pothole near bus stop',location:'MG Road',lat:12.9756,lng:77.6066,status:'Open',date:'2026-10-20'},
+ {category:'pothole',description:'Multiple potholes after rain',location:'Outer Ring Road',lat:12.9352,lng:77.6245,status:'In progress',date:'2026-10-12'},
+ {category:'garbage',description:'Overflowing bin, not cleared for days',location:'Indiranagar 12th Main',lat:12.9719,lng:77.6412,status:'Open',date:'2026-10-28'},
+ {category:'garbage',description:'Illegal dumping on vacant plot',location:'Jayanagar 4th Block',lat:12.9250,lng:77.5938,status:'Resolved',date:'2026-09-30'},
+ {category:'footpath',description:'Broken slabs, unsafe for pedestrians',location:'Malleshwaram 8th Cross',lat:13.0035,lng:77.5710,status:'Open',date:'2026-10-18'},
+ {category:'footpath',description:'Footpath blocked by debris',location:'Koramangala 5th Block',lat:12.9352,lng:77.6169,status:'In progress',date:'2026-10-25'},
+ {category:'streetlight',description:'Three lights out on the stretch',location:'HSR Layout Sector 2',lat:12.9116,lng:77.6389,status:'Open',date:'2026-10-30'},
+ {category:'streetlight',description:'Flickering light near park',location:'Cubbon Park Gate',lat:12.9763,lng:77.5929,status:'Resolved',date:'2026-10-05'}
+].map((r,i)=>({id:i+1,...r}));
+
+let data=load(), activeCat='';
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY));if(Array.isArray(d))return d}catch(e){}return structuredClone(SAMPLE)}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){}}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+// map
+const map=L.map('map').setView([12.9716,77.5946],12);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
+const layer=L.layerGroup().addTo(map);let pick;
+map.on('click',e=>{$('lat').value=e.latlng.lat.toFixed(6);$('lng').value=e.latlng.lng.toFixed(6);
+  if(pick)pick.setLatLng(e.latlng);else pick=L.marker(e.latlng,{opacity:.6}).addTo(map)});
+
+function pin(c){return L.divIcon({className:'',html:`<div style="background:${c.color};color:#fff;width:30px;height:30px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 1px 4px #0006"><span style="transform:rotate(45deg)">${c.icon}</span></div>`,iconSize:[30,30],iconAnchor:[15,30],popupAnchor:[0,-28]})}
+
+// selects
+$('fCat').innerHTML='<option value="">All categories</option>'+Object.entries(CATS).map(([k,c])=>`<option value="${k}">${c.icon} ${c.label}</option>`).join('');
+$('fCatForm').innerHTML=Object.entries(CATS).map(([k,c])=>`<option value="${k}">${c.icon} ${c.label}</option>`).join('');
+
+function filtered(){
+  const q=$('q').value.toLowerCase(),c=$('fCat').value||activeCat,s=$('fStatus').value;
+  return data.filter(r=>(!c||r.category===c)&&(!s||r.status===s)&&(!q||(r.description+' '+r.location).toLowerCase().includes(q)));
+}
+function render(){
+  // stats
+  $('stats').innerHTML=Object.entries(CATS).map(([k,c])=>{
+    const all=data.filter(r=>r.category===k),open=all.filter(r=>r.status!=='Resolved').length;
+    return `<div class="stat ${activeCat===k?'on':''}" data-k="${k}"><b>${c.icon} ${open}</b><span>${c.label} · ${all.length} total</span></div>`}).join('');
+  document.querySelectorAll('.stat').forEach(el=>el.onclick=()=>{activeCat=activeCat===el.dataset.k?'':el.dataset.k;$('fCat').value=activeCat;render()});
+  const rows=filtered();
+  layer.clearLayers();
+  rows.forEach(r=>{
+    const c=CATS[r.category]||CATS.pothole;if(!isFinite(r.lat)||!isFinite(r.lng))return;
+    r._m=L.marker([r.lat,r.lng],{icon:pin(c)}).addTo(layer)
+      .bindPopup(`<b>${c.label}</b><br>${esc(r.description)}<br><small>${esc(r.location)} · ${esc(r.status)}</small>`);
+  });
+  $('list').innerHTML=rows.length?rows.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')).map(r=>{
+    const c=CATS[r.category]||CATS.pothole;
+    return `<div class="item" data-id="${r.id}"><span class="tag" style="background:${c.color}">${c.icon} ${c.label}</span><span class="st">${esc(r.status)}</span>
+    <div>${esc(r.description)}</div><small>${esc(r.location)} · ${esc(r.date||'')}</small>
+    <div style="margin-top:6px"><select class="chg" data-id="${r.id}">${['Open','In progress','Resolved'].map(s=>`<option ${s===r.status?'selected':''}>${s}</option>`).join('')}</select>
+    <button class="del" data-id="${r.id}">Delete</button></div></div>`}).join(''):'<p class="hint">No issues match.</p>';
+  document.querySelectorAll('.item').forEach(el=>el.onclick=e=>{
+    if(e.target.closest('select,button'))return;
+    const r=data.find(x=>x.id==el.dataset.id);if(r&&r._m){map.setView([r.lat,r.lng],16);r._m.openPopup()}});
+  document.querySelectorAll('.chg').forEach(el=>el.onchange=()=>{data.find(x=>x.id==el.dataset.id).status=el.value;save();render()});
+  document.querySelectorAll('.del').forEach(el=>el.onclick=()=>{data=data.filter(x=>x.id!=el.dataset.id);save();render()});
+  if(rows.length>1){const b=L.latLngBounds(rows.filter(r=>isFinite(r.lat)).map(r=>[r.lat,r.lng]));if(b.isValid())map.fitBounds(b,{padding:[30,30],maxZoom:15})}
+}
+['q','fCat','fStatus'].forEach(id=>$(id).addEventListener('input',()=>{if(id==='fCat')activeCat=$('fCat').value;render()}));
+
+// add
+$('form').onsubmit=e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target));
+  data.push({id:Date.now(),category:f.category,description:f.description,location:f.location,lat:+f.lat,lng:+f.lng,status:f.status,date:f.date||new Date().toISOString().slice(0,10)});
+  save();e.target.reset();render()};
+
+// import / export
+const norm=r=>{const k=String(r.category||'').toLowerCase().replace(/[^a-z]/g,'');
+  const cat=k.includes('pothole')?'pothole':k.includes('garb')||k.includes('waste')||k.includes('trash')?'garbage':k.includes('foot')||k.includes('side')||k.includes('pavement')?'footpath':k.includes('light')||k.includes('lamp')?'streetlight':null;
+  return cat&&isFinite(+r.lat)&&isFinite(+r.lng)?{id:Date.now()+Math.random(),category:cat,description:r.description||'',location:r.location||r.address||'',lat:+r.lat,lng:+r.lng,status:r.status||'Open',date:r.date||''}:null};
+function parseCSV(t){const rows=[];let row=[],cur='',q=false;
+  for(let i=0;i<t.length;i++){const ch=t[i];
+    if(q){if(ch=='"'&&t[i+1]=='"'){cur+='"';i++}else if(ch=='"')q=false;else cur+=ch}
+    else if(ch=='"')q=true;else if(ch==','){row.push(cur);cur=''}
+    else if(ch=='\n'||ch=='\r'){if(ch=='\r'&&t[i+1]=='\n')i++;row.push(cur);rows.push(row);row=[];cur=''}else cur+=ch}
+  if(cur||row.length){row.push(cur);rows.push(row)}
+  const h=rows.shift().map(x=>x.trim().toLowerCase());
+  return rows.filter(r=>r.length>1).map(r=>Object.fromEntries(h.map((k,i)=>[k,r[i]])))}
+$('btnImport').onclick=()=>$('file').click();
+$('file').onchange=async e=>{const f=e.target.files[0];if(!f)return;const t=await f.text();
+  try{const raw=f.name.endsWith('.json')?JSON.parse(t):parseCSV(t);const rows=raw.map(norm).filter(Boolean);
+    if(!rows.length)return alert('No valid rows found. Check the import format.');
+    data=data.concat(rows);save();render();alert(rows.length+' issues imported.')}catch(err){alert('Could not read file: '+err.message)}
+  e.target.value=''};
+$('btnExport').onclick=()=>{const h=['category','description','location','lat','lng','status','date'];
+  const csv=[h.join(',')].concat(data.map(r=>h.map(k=>'"'+String(r[k]??'').replace(/"/g,'""')+'"').join(','))).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='civic-issues.csv';a.click()};
+$('btnReset').onclick=()=>{if(confirm('Replace all data with sample data?')){data=structuredClone(SAMPLE);save();render()}};
+render();
+</script>
+
+
+</body></html>

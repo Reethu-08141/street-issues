@@ -1,0 +1,9 @@
+category,description,location,lat,lng,status,date
+"pothole","Deep pothole near bus stop","MG Road","12.9756","77.6066","Open","2026-10-20"
+"pothole","Multiple potholes after rain","Outer Ring Road","12.9352","77.6245","In progress","2026-10-12"
+"garbage","Overflowing bin, not cleared for days","Indiranagar 12th Main","12.9719","77.6412","Open","2026-10-28"
+"garbage","Illegal dumping on vacant plot","Jayanagar 4th Block","12.925","77.5938","Resolved","2026-09-30"
+"footpath","Broken slabs, unsafe for pedestrians","Malleshwaram 8th Cross","13.0035","77.571","Open","2026-10-18"
+"footpath","Footpath blocked by debris","Koramangala 5th Block","12.9352","77.6169","In progress","2026-10-25"
+"streetlight","Three lights out on the stretch","HSR Layout Sector 2","12.9116","77.6389","Open","2026-10-30"
+"streetlight","Flickering light near park","Cubbon Park Gate","12.9763","77.5929","Resolved","2026-10-05"
